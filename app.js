@@ -2,11 +2,12 @@
 
 let express = require('express');
 let bodyParser = require('body-parser');
-let users = require('./routes/users');
 let mongoose = require('mongoose');
 let router = express.Router();
 let app = express();
 let port = process.env.PORT || 3000;
+
+let session = require('./routes/session');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -16,7 +17,7 @@ router.get('/', function(req, res) {
 });
 
 app.use('/', router);
-app.use('/users', users);
+app.use('/Session', session);
 
 app.use(function (req, res, next) {
   let err = new Error('Not Found');
@@ -25,5 +26,4 @@ app.use(function (req, res, next) {
 });
 
 app.listen(port);
-
 console.log('Listening on ' + port + '.');
