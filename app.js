@@ -3,6 +3,7 @@
 let express = require('express');
 let bodyParser = require('body-parser');
 let users = require('./routes/users');
+let mongoose = require('mongoose');
 let router = express.Router();
 let app = express();
 let port = process.env.PORT || 3000;
