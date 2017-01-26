@@ -15,28 +15,42 @@ let User = mongoose.model('User', new Schema({
 
 //////
 
-router.post('/Login', (req, res, next) => {
-    User.find({}, function(err, users) {
-        res.json(users);
-    });
+router.post('/Login', (req, res) => {
+    User.findOne({
+        name: req.body.name
+    }, (err, user) => {
+
+        if(err) throw err;
+
+        if(!user) {
+            res.json({resultCode: 601, message: 'User not found'})
+        }  else if(user) {
+            if(req.body.password != user.password) {
+                res.json({resultCode: 602, message: 'Wrong password'})
+            } else {
+
+            }
+        }
+    })
 });
 
-router.post('/Logout', (req, res, next) => {
+router.post('/Logout', (req, res) => {
     res.send('LOGOUT');
 });
 
-router.get('/setup', function(req, res) {
-    var nick = new User({
-        name: 'Nick Cerminara',
-        password: 'password',
-        admin: true
+router.get('/Register', (req, res) => {
+    let nick = new User({
+        name: req.body.name,
+        password: req.body.password,
+        admin: req.body.admin
     });
 
-    nick.save(function(err) {
-        if (err) throw err;
-
-        console.log('User saved successfully');
-        res.json({ success: true });
+    nick.save((err) => {
+        if (err) {
+            res.json({resultCode: 200, message: 'User saved successfully'});
+            throw err;
+        }
+        res.json({resultCode: 200, message: 'User saved successfully'});
     });
 });
 
